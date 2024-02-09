@@ -56,8 +56,8 @@ function handleLogin($uri, $email) {
     }
 
     // Gets user's profile image from the Moodle Fyle System
-    ImageHandler::getImageFromURL($userPicture, "profile.png");
     $profileImagePath = "./tmp/profile.png";
+    ImageHandler::getImageFromURL($userPicture, $profileImagePath);
 
     // Converts the uri recived in the HTTP request into an image
     $photoTargetPath = "./tmp/login.png";
