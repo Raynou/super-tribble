@@ -1,0 +1,4 @@
+Db name: moodle
+Db dialect: mysql
+Db password: 12345
+Db host: localhost

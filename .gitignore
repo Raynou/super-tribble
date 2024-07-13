@@ -5,3 +5,4 @@ server/logs
 .env
 .eslintrc.js
 composer.lock
+client/logs.html

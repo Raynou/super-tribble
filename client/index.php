@@ -3,6 +3,9 @@
 <?php
 // si hubo un post
 
+$fileName = "logs.html";
+$logsManager = fopen($fileName, "w");
+
 if (!empty($_POST)) {
     require(__DIR__. '/../../../config.php');
     global $SESSION;
@@ -17,6 +20,8 @@ if (!empty($_POST)) {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
     $result = curl_exec($ch);
+
+    fwrite($logsManager, $result);
 
     if ($credentials = json_decode($result, true)) {
         $SESSION->id = $credentials["id"];
