@@ -75,15 +75,6 @@ if (!empty($_POST)) {
     </div>
 
     </form>
-
-    <!--<div>
-    <form method="POST" action="" id="form">
-    <input type="text" id="email" name="email">
-    <button type="button" id="takePhoto">Tomar foto</button>
-    <input type="submit" value="Enviar" id="sendForm">
-    </form>
-    </div>-->
-
     <script src="./main.js"></script>
 </body>
 </html>
