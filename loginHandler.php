@@ -1,36 +1,23 @@
 <?php
 
-require_once("./vendor/autoload.php");
-require_once(__DIR__ . '/../../../config.php');
-
-header("Content-Type:application/json");
+require_once(__DIR__ . "/vendor/autoload.php");
+require_once(__DIR__ . '/../../config.php');
 
 use Stormwind\FaceAnalyzer;
 use Stormwind\QueryHandler;
 use Stormwind\ImageHandler;
 use Dotenv\Dotenv;
 
-$method = $_SERVER["REQUEST_METHOD"];
-
-switch($method) {
-    case "POST":
-        $requestBody = file_get_contents('php://input');
-
-        list($email, $uri) = explode("&", $requestBody);
-        $email = urldecode(explode("=", $email)[1]);
-        $uri = urldecode(explode("=", $uri)[1]);
-        $str = handleLogin($uri, $email);
-        echo(json_encode($str));
-        break;
-}
-
 function handleLogin($uri, $email) {
 
-    $logs = fopen("./logs", "w");
+    $tmpFolderPath = __DIR__ . "/tmp";
+    $logsFilePath = __DIR__ . "/logs";
+
+    $logs = fopen($logsFilePath, "w");
 
     // Creates a folder to save the images that will be compared
-    if(!file_exists(getcwd()."/tmp")) {
-        mkdir("tmp");
+    if(!file_exists($tmpFolderPath)) {
+        mkdir($tmpFolderPath);
     }
 
     // Load enviorment vars if exists a configuration file
@@ -59,11 +46,11 @@ function handleLogin($uri, $email) {
     }
 
     // Gets user's profile image from the Moodle Fyle System
-    $profileImagePath = "./tmp/profile.png";
+    $profileImagePath = $tmpFolderPath . "/profile.png";
     ImageHandler::getImageFromURL($userPicture, $profileImagePath);
 
     // Converts the uri recived in the HTTP request into an image
-    $photoTargetPath = "./tmp/login.png";
+    $photoTargetPath = $tmpFolderPath . "/login.png";
     ImageHandler::base64ToImage($uri, $photoTargetPath);
 
     if($credentials != null) {

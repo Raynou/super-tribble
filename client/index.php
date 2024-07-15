@@ -1,36 +1,17 @@
 <!DOCTYPE html>
 
 <?php
-// si hubo un post
-
-$fileName = "logs.html";
-$logsManager = fopen($fileName, "w");
 
 if (!empty($_POST)) {
     require(__DIR__. '/../../../config.php');
+    require(__DIR__ . "/../loginHandler.php");
     global $SESSION;
-
-    $ch = curl_init();
-
-    // arreglo asociativo con los valores
-    $data = array("email" => $_POST['email'], "uri" => $_POST['uri']);
-    curl_setopt($ch, CURLOPT_URL, "localhost/moodle/auth/faceid/server/api.php");
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-    $result = curl_exec($ch);
-
-    fwrite($logsManager, $result);
-
+    
+    $result = handleLogin($_POST['uri'], $_POST['email']);
     if ($credentials = json_decode($result, true)) {
         $SESSION->id = $credentials["id"];
         $SESSION->password = $credentials["password"];
     }
-
-    curl_close($ch);
-
-    header("Location: http://localhost/moodle/login/index.php");
     die();
 }
 

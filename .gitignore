@@ -1,6 +1,6 @@
-server/tmp
-server/vendor
-server/logs
+tmp
+vendor
+logs
 .uri
 .env
 .eslintrc.js
