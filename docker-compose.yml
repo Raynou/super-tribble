@@ -1,0 +1,34 @@
+version: '3.9'
+services:
+  plugin:
+    build:
+      context: .
+    ports:
+      - "80:80"
+    depends_on:
+      plugindb:
+        condition: service_started
+    links:
+      - plugindb
+    volumes:
+      - .:/var/www/html/moodle/blocks/simplecamera
+      - moodle:/var/www/html/moodle
+      - moodle-data:/var/www/moodledata
+      - /var/www/html/moodle/.grunt/
+      - /var/www/html/moodle/node_modules/
+    env_file:
+      - .env
+  plugindb:
+    image: mysql
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_DATABASE=moodle
+    volumes:
+      - mysql-data:/var/lib/mysql
+volumes:
+  mysql-data:
+  moodle:
+  moodle-data:
