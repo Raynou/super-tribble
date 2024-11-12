@@ -2,9 +2,9 @@
 
 require_once(__DIR__ . "/vendor/autoload.php");
 require_once(__DIR__ . '/../../config.php');
+require_once("connection.php");
 
 use Stormwind\FaceAnalyzer;
-use Stormwind\QueryHandler;
 use Stormwind\ImageHandler;
 use Dotenv\Dotenv;
 
@@ -20,20 +20,7 @@ function handleLogin($uri, $email) {
         mkdir($tmpFolderPath);
     }
 
-    // Load enviorment vars if exists a configuration file
-    $dotenvPath = __DIR__ . '/.env';
-    if(file_exists($dotenvPath)) {
-        fwrite($logs, "Existe archivo .env\n");
-        $dotenv = Dotenv::createImmutable(__DIR__);
-        $dotenv->load();
-        $queryHandler = new QueryHandler();
-    } else if(get_config("auth_faceid") != null) { // Get credentials from Moodle config
-        $credentials = (array) get_config('auth_faceid');
-        fwrite($logs, json_encode($credentials));
-        $queryHandler = new QueryHandler($credentials);
-    }
-
-    $userPicture = $queryHandler->getUserPicture($email);
+    $userPicture = getUserByEmail($email, "picture");
 
     /*The value zero for the user picture in the moodle database is reserved
      for the guest user.
@@ -58,8 +45,8 @@ function handleLogin($uri, $email) {
     }
 
     if(FaceAnalyzer::compareFaces($profileImagePath, $photoTargetPath)) {
-        $id = $queryHandler->getUserId($email);
-        $password = $queryHandler->getUserPassword($email);
+        $id = getUserByEmail($email, "id");
+        $password = getUserByEmail($email, "password");
         return array("id" => $id, "password" => $password);
     }else {
         return "Error: Faces don't match";
