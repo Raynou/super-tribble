@@ -1,8 +1,8 @@
 version: '3.9'
 services:
   plugin:
-    build:
-      context: .
+    image: ghcr.io/raynou/moodle:latest
+    working_dir: /var/www/html/moodle/auth/faceid
     ports:
       - "80:80"
     depends_on:
