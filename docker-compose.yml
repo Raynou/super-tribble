@@ -11,7 +11,7 @@ services:
     links:
       - plugindb
     volumes:
-      - .:/var/www/html/moodle/blocks/simplecamera
+      - .:/var/www/html/moodle/auth/faceid
       - moodle:/var/www/html/moodle
       - moodle-data:/var/www/moodledata
       - /var/www/html/moodle/.grunt/
